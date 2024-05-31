@@ -1,0 +1,11 @@
+{% extends 'base.html.twig' %}
+
+{% block title "Modifier une note" %}
+
+{% block body %}
+	<div class="d-flex flex-column align-items-center">
+		<h1>Modifier la note {{note.title}}</h1>
+		{{ form(form) }}
+	</div>
+
+{% endblock %}

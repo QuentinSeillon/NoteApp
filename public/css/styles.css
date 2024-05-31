@@ -1,0 +1,25 @@
+.class-margin {
+    margin-left: 23vw;
+    width: 100%;
+}
+
+.header {
+    padding-top: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid black;
+}
+
+.add-button {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+}
+
+ion-icon {
+    color: blue
+}
+
+.no-connected {
+    margin-top: 5rem;
+    text-align: center;
+}

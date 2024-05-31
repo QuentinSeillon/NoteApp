@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	{{ title }}
+{% endblock %}
+
+{% block body %}
+
+	<div>
+		<div class="header text-center">
+			<h1>Hello!</h1>
+			<div class='test'>
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. Corrupti aliquam esse non repellat facilis natus rerum nesciunt omnis doloribus doloremque! Beatae autem ipsum velit aperiam delectus laudantium laboriosam quia provident.
+			</div>
+		</div>
+
+		{% if app.user %}
+			<div class="add-button">
+				<a href="{{ path('note.create') }}">
+					<ion-icon name="add-circle-outline" size="large" class="m-3"></ion-icon>
+				</a>
+			</div>
+			<div class="d-flex justify-content-evenly flex-wrap m-auto" style="">
+				{% for note in notes %}
+					<div class="card m-2" style="width: 18rem;">
+						<div class="card-body">
+							<h5 class="card-title">{{ note.title }}</h5>
+							<p class="card-text">{{ note.content }}</p>
+							<div class="d-flex justify-content-around">
+								<a href="{{ path('note.update', {id: note.id}) }}" class="btn btn-primary">Modifier</a>
+								<form action="{{ path('note.delete', {id: note.id}) }}" method="post">
+									<input type="hidden" name="_method" value="DELETE">
+									<button type="submit" class="btn btn-danger">Supprimer</button>
+								</form>
+							</div>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+			{% else %}
+			<div class="no-connected">
+				{# ici gerer le lien vers le formulaire pour se créer un compte sur le site #}
+				<p>Vous devez vous <a href="{{ path('app_register') }}">connecter</a> pour pouvoir créer une note</p>
+			</div>
+		{% endif %}
+
+
+{% endblock %}
