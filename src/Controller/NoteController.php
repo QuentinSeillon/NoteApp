@@ -6,6 +6,7 @@ use App\Entity\Note;
 use App\Form\NoteType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,6 +14,14 @@ use Symfony\Component\Routing\Requirement\Requirement;
 
 class NoteController extends AbstractController
 {
+
+    private $security;
+
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+    
     #[Route('/note/create', name: 'note.create')]
     public function noteCreate(Request $request, EntityManagerInterface $em)
     {
@@ -21,6 +30,9 @@ class NoteController extends AbstractController
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid()) {
+            $user = $this->security->getUser();
+            $note->setUser($user);
+
             $em->persist($note);
             $em->flush();
             $this->addFlash('success', 'La note a bien été ajouté');
@@ -32,7 +44,7 @@ class NoteController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'note.update', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
+    #[Route('/note/{id}/update', name: 'note.update', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
     public function noteUpdate(Request $request,Note $note, EntityManagerInterface $em)
     {
         $form = $this->createForm(NoteType::class, $note);
@@ -48,8 +60,8 @@ class NoteController extends AbstractController
         ]);
     }
 
-    #[Route('{id}', name: 'note.delete', methods: ['DELETE'],  requirements: ['id' => Requirement::DIGITS])]
-    public function delete(Note $note, EntityManagerInterface $em)
+    #[Route('/note/{id}/delete', name: 'note.delete', methods: ['DELETE'],  requirements: ['id' => Requirement::DIGITS])]
+    public function delete(Note $note, EntityManagerInterface $em): Response
     {
         $em->remove($note);
         $em->flush();

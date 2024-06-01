@@ -5,7 +5,10 @@
 {% block body %}
 	<div class="d-flex flex-column align-items-center">
 		<h1>Créer une nouvelle recette</h1>
-		{{ form(form) }}
+		{{ form_start(form) }}
+		{{ form_row(form.title) }}
+		{{ form_widget(form.content, {'attr': {'class': 'mytextarea'}}) }}
+		{{ form_end(form) }}
 	</div>
 
 {% endblock %}

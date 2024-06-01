@@ -4,8 +4,12 @@
 
 {% block body %}
 	<div class="d-flex flex-column align-items-center">
-		<h1>Modifier la note {{note.title}}</h1>
-		{{ form(form) }}
+		<h1>Modifier la note
+			{{note.title}}</h1>
+		{{ form_start(form) }}
+		{{ form_row(form.title) }}
+		{{ form_widget(form.content, {'attr': {'class': 'mytextarea', 'required': 'required'}}) }}
+		{{ form_end(form) }}
 	</div>
 
 {% endblock %}

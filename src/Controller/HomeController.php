@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\NoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use HTMLPurifier;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -13,18 +15,28 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class HomeController extends AbstractController
 {
-    #[Route('/', name: 'home.index')]
-    public function index(Request $request, NoteRepository $noteRepo, UserPasswordHasherInterface $hasher, EntityManagerInterface $em): Response
-    {
-        // $user = new User();
-        // $user->setEmail('test@gmail.com')->setUsername('Jhon')->setPassword($hasher->hashPassword($user, 'password'))->setRoles([]);
-        // $em->persist($user);
-        // $em->flush();
+    private $security;
 
-        $notes = $noteRepo->findAll();
+    public function __construct(Security $security)
+    {
+        $this->security = $security;
+    }
+    #[Route('/', name: 'home.index')]
+    public function index(NoteRepository $noteRepo): Response
+    {
+        $user = $this->security->getUser();
+        if (!$user) {
+            return $this->render('home/index.html.twig', [
+                'title' => 'Home'
+            ]);
+        }
+
+        $notes = $noteRepo->findNotesByUser($user);
+
         return $this->render('home/index.html.twig', [
             'title' => 'Home',
-            'notes' => $notes
+            'notes' => $notes,
+            'user' => $user
         ]);
     }
 }
