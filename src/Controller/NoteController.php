@@ -3,7 +3,9 @@
 namespace App\Controller;
 
 use App\Entity\Note;
+use App\Entity\User;
 use App\Form\NoteType;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
@@ -45,7 +47,7 @@ class NoteController extends AbstractController
     }
 
     #[Route('/note/{id}/update', name: 'note.update', methods: ['GET', 'POST'], requirements: ['id' => Requirement::DIGITS])]
-    public function noteUpdate(Request $request,Note $note, EntityManagerInterface $em)
+    public function noteUpdate(Request $request,Note $note, EntityManagerInterface $em, User $user)
     {
         $form = $this->createForm(NoteType::class, $note);
         $form->handleRequest($request);
@@ -56,7 +58,8 @@ class NoteController extends AbstractController
         }
         return $this->render('note/update.html.twig', [
             'note' => $note,
-            'form' => $form
+            'form' => $form,
+            'user' => $user
         ]);
     }
 
