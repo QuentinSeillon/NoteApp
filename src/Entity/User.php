@@ -48,7 +48,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Note>
      */
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'user', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'user', cascade: ['persist'], orphanRemoval: true)]
     private Collection $notes;
 
     public function __construct()
@@ -82,6 +82,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return (string) $this->username;
     }
+   
 
     /**
      * @see UserInterface

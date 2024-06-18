@@ -18,7 +18,8 @@ class Note
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank]
+    #[Assert\NotBlank(message: 'Le titre est obligatoire')]
+    #[Assert\Length(min: 1, max: 255, minMessage: 'Le titre doit faire au moins {{ limit }}', maxMessage: 'Le titre doit faire au max {{ limit }}')]
     #[Groups(['notes.show'])]
     private ?string $title = null;
 

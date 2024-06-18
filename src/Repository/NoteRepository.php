@@ -26,6 +26,14 @@ class NoteRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findAllWithPagination($page, $limit) {
+        $qb = $this->createQueryBuilder('n')
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit);
+
+        return $qb->getQuery()->getResult();
+    }
+
     //    /**
     //     * @return Note[] Returns an array of Note objects
     //     */
